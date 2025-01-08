@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Brand() {
-  const [brandName, setBrandName] = useState('')
-  const navigate = useNavigate()
+function BrandName() {
+  const [brandName, setBrandName] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (brandName) {
-      console.log('Brand name submitted:', brandName)
-      navigate('/final-step')
+      console.log("Brand name submitted:", brandName);
+      navigate("/final-step");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-green-50/50">
@@ -26,7 +26,9 @@ function Brand() {
         </div>
 
         <div className="space-y-6">
-        <h1 className="text-[32px] font-inter tight text-gray-300">Welcome aboard</h1>
+          <h1 className="text-[32px] font-inter tight text-gray-300">
+            Welcome aboard
+          </h1>
 
           <div className="bg-white rounded-[20px] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-8">
             <div className="space-y-3">
@@ -38,7 +40,10 @@ function Brand() {
 
             <form onSubmit={handleSubmit} className="mt-8">
               <div className="space-y-1.5">
-                <label htmlFor="brandName" className="block text-[13px] text-gray-500">
+                <label
+                  htmlFor="brandName"
+                  className="block text-[13px] text-gray-500"
+                >
                   Brand name *
                 </label>
                 <input
@@ -59,16 +64,16 @@ function Brand() {
                   className="group flex items-center text-sm text-gray-700 hover:text-gray-900 focus:outline-none"
                 >
                   Next
-                  <svg 
-                    className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-0.5" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-0.5"
+                    fill="none"
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={1.5} 
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
@@ -79,8 +84,7 @@ function Brand() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Brand
-
+export default BrandName;
