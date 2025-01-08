@@ -7,7 +7,7 @@ import googleIcon from '../../assets/google.png';
 import facebookIcon from '../../assets/facebook.png';
 import appleIcon from '../../assets/apple.png';
 import Picture from '../../assets/pic.png';
-import OTP from './otp';
+
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const SignUp: React.FC = () => {
     try {
       // Here you would typically call your auth service
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating API call
-      navigate('/dashboard'); // Redirect after successful signup
+      navigate('/otp'); // Redirect after successful signup
     } catch (error) {
       console.error('Signup error:', error);
     } finally {
