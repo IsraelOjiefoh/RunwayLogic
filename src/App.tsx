@@ -9,10 +9,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignUp/>} />
-        <Route path="/otp" element={<OtpVerification/>} />
-        <Route path="/dropshipper-name" element={<DropshippersName />} />
+        <Route path="/" element={<SignUp />} />
+        <Route path="/otp" element={<OtpVerification />} />
         <Route path="/Occupation" element={<Occupation />} />
+        <Route path="/dropshipper-name" element={<DropshippersName />} />
         <Route path="/brand-name" element={<BrandName />} />
       </Routes>
     </Router>
