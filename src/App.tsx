@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import DropshippersName from "./components/DropshippersName";
-import Occupation from "./components/occupation";
-import BrandName from "./components/BrandName";
+import DropshippersName from "./components/onboarding/DropshippersName";
+import Occupation from "./components/onboarding/occupation";
+import BrandName from "./components/onboarding/BrandName";
 import SignUp from "./components/account creation/CreateAccount";
 import OtpVerification from "./components/account creation/otp";
 
