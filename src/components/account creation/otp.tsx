@@ -7,6 +7,7 @@ const OtpVerification: React.FC = () => {
   const { email } = useEmail();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [errorMsg, setErrorMsg] = useState("");
+  const [message, setMessage] = useState("");
 
   const Navigate = useNavigate();
   const ApiUrl = GetApiUrl();
@@ -53,18 +54,36 @@ const OtpVerification: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setErrorMsg(data.error); // Handle success response
+        setErrorMsg(data.error);
       } else {
-        Navigate("/occupation"); // Redirect to the next step
+        Navigate("/occupation");
       }
     } catch (error) {
       console.error("Error submitting OTP:", error);
     }
   };
 
-  const handleResendCode = () => {
-    console.log("Resending OTP...");
-    // Add resend logic here
+  const handleResendCode = async () => {
+    try {
+      const response = await fetch(`${ApiUrl}/users/resend-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setErrorMsg(data.error); // Handle success response
+      } else {
+        setMessage(data.message || "A new code has been sent to your email");
+      }
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+    }
   };
 
   return (
@@ -91,7 +110,9 @@ const OtpVerification: React.FC = () => {
       {errorMsg && (
         <p className="mt-2 text-sm text-center text-red-600">{errorMsg}</p>
       )}
-
+      {message && (
+        <p className="mt-2 text-sm text-center text-green-600">{message}</p>
+      )}
       <button
         className="w-full max-w-xs px-4 py-2 bg-gray-800 text-white font-medium text-lg rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         onClick={handleSubmit}
