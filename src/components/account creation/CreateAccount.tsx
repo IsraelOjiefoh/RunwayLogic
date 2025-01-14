@@ -1,56 +1,83 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo (2).png';
-import googleIcon from '../../assets/google.png';
-import facebookIcon from '../../assets/facebook.png';
-import appleIcon from '../../assets/apple.png';
-import Picture from '../../assets/pic.png';
-
+import React, { useState } from "react";
+import { useEmail } from "../../EmailContext";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo (2).png";
+// import googleIcon from "../../assets/google.png";
+// import facebookIcon from "../../assets/facebook.png";
+// import appleIcon from "../../assets/apple.png";
+import Picture from "../../assets/pic.png";
 
 const SignUp: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const { email, setEmail } = useEmail();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex for validation
+
+    if (!email || !emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      // Here you would typically call your auth service
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating API call
-      navigate('/otp'); // Redirect after successful signup
+      const response = await fetch("http://localhost:3000/users/email-auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the request content type
+        },
+        body: JSON.stringify({ email }), // Convert the email to JSON format
+      });
+
+      const result = await response.json(); // Parse the JSON response
+      if (response.status === 409) {
+        setErrorMsg(result.error || "Email already exists please LogIn");
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to send email");
+      }
+
+      navigate("/otp"); // Redirect after successful signup
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error.message);
+      setErrorMsg("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSocialSignup = async (provider: 'google' | 'facebook' | 'apple') => {
-    setIsLoading(true);
-    
-    try {
-      // Here you would typically initiate OAuth flow
-      switch (provider) {
-        case 'google':
-          window.open('https://accounts.google.com/o/oauth2/v2/auth', '_blank');
-          break;
-        case 'facebook':
-          window.open('https://facebook.com/dialog/oauth', '_blank');
-          break;
-        case 'apple':
-          window.open('https://appleid.apple.com/auth/authorize', '_blank');
-          break;
-      }
-    } catch (error) {
-      console.error('Social signup error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleSocialSignup = async (
+  //   provider: "google" | "facebook" | "apple"
+  // ) => {
+  //   setIsLoading(true);
+
+  //   try {
+  //     // Here you would typically initiate OAuth flow
+  //     switch (provider) {
+  //       case "google":
+  //         window.open("https://accounts.google.com/o/oauth2/v2/auth", "_blank");
+  //         break;
+  //       case "facebook":
+  //         window.open("https://facebook.com/dialog/oauth", "_blank");
+  //         break;
+  //       case "apple":
+  //         window.open("https://appleid.apple.com/auth/authorize", "_blank");
+  //         break;
+  //     }
+  //   } catch (error) {
+  //     console.error("Social signup error:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 gap-0">
@@ -64,16 +91,18 @@ const SignUp: React.FC = () => {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Create an account
+              </h1>
               <p className="text-sm text-gray-500">
                 Optimize news and grow your brand with AI-driven insights
               </p>
             </div>
 
-            <form onSubmit={handleEmailSignup} className="space-y-4">
+            <form onSubmit={handleEmailSignup} className="space-y-4" noValidate>
               <div className="space-y-2">
-                <label 
-                  htmlFor="email" 
+                <label
+                  htmlFor="email"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Email
@@ -81,23 +110,29 @@ const SignUp: React.FC = () => {
                 <input
                   id="email"
                   type="email"
+                  name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="e.g. johndoe@gmail.com"
                   className="w-full px-3 py-2 border rounded-md"
-                  required
                 />
               </div>
-              <button 
+              {errorMsg && (
+                <p className="mt-2 text-sm text-center text-red-600">
+                  {errorMsg}
+                </p>
+              )}
+
+              <button
                 type="submit"
                 disabled={isLoading}
                 className="w-full bg-gray-900 text-white py-2 rounded-md hover:bg-gray-800 disabled:opacity-50"
               >
-                {isLoading ? 'Creating account...' : 'Create my account'}
+                {isLoading ? "Creating account..." : "Create my account"}
               </button>
             </form>
 
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t"></div>
               </div>
@@ -106,36 +141,42 @@ const SignUp: React.FC = () => {
                   Or continue with
                 </span>
               </div>
-            </div>
+            </div> */}
 
-            <div className="grid grid-cols-3 gap-2">
+            {/* <div className="grid grid-cols-3 gap-2">
               <button
-                onClick={() => handleSocialSignup('google')}
+                onClick={() => handleSocialSignup("google")}
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
                 <img src={googleIcon} alt="Google" />
               </button>
               <button
-                onClick={() => handleSocialSignup('facebook')}
+                onClick={() => handleSocialSignup("facebook")}
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
                 <img src={facebookIcon} alt="Facebook" />
               </button>
               <button
-                onClick={() => handleSocialSignup('apple')}
+                onClick={() => handleSocialSignup("apple")}
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
-                <img src={appleIcon} alt="Apple"  />
+                <img src={appleIcon} alt="Apple" />
               </button>
-            </div>
+            </div> */}
 
             <p className="text-xs text-center text-gray-500">
               By creating an account, I agree to the{" "}
-              <a href="#" className="underline underline-offset-4 hover:text-gray-800">
+              <a
+                href="#"
+                className="underline underline-offset-4 hover:text-gray-800"
+              >
                 Terms of service
               </a>{" "}
               and{" "}
-              <a href="#" className="underline underline-offset-4 hover:text-gray-800">
+              <a
+                href="#"
+                className="underline underline-offset-4 hover:text-gray-800"
+              >
                 Privacy policy
               </a>
             </p>
