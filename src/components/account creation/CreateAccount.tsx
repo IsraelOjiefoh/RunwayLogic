@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { useEmail } from "../../EmailContext";
 import { useNavigate } from "react-router-dom";
+import { GetApiUrl } from "../../utils";
+import { useEmail } from "../../EmailContext";
 import logo from "../../assets/logo (2).png";
 // import googleIcon from "../../assets/google.png";
 // import facebookIcon from "../../assets/facebook.png";
@@ -13,7 +14,9 @@ const SignUp: React.FC = () => {
   const { email, setEmail } = useEmail();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
   const navigate = useNavigate();
+  const ApiUrl = GetApiUrl();
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,16 +31,13 @@ const SignUp: React.FC = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://server-auth-twxy.onrender.com/users/email-auth",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Set the request content type
-          },
-          body: JSON.stringify({ email }), // Convert the email to JSON format
-        }
-      );
+      const response = await fetch(`${ApiUrl}/users/email-auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the request content type
+        },
+        body: JSON.stringify({ email }), // Convert the email to JSON format
+      });
 
       const result = await response.json(); // Parse the JSON response
       if (response.status === 409) {

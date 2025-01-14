@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEmail } from "../../EmailContext";
+import { GetApiUrl } from "../../utils";
 
 const OtpVerification: React.FC = () => {
   const { email } = useEmail();
@@ -8,6 +9,7 @@ const OtpVerification: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const Navigate = useNavigate();
+  const ApiUrl = GetApiUrl();
 
   const handleChange = (value: string, index: number) => {
     if (/^\d?$/.test(value)) {
@@ -37,19 +39,16 @@ const OtpVerification: React.FC = () => {
     const otpCode = otp.join(""); // Join OTP array into a string
 
     try {
-      const response = await fetch(
-        "https://server-auth-twxy.onrender.com/users/verify-code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            code: otpCode, // Send OTP code and email in the request body
-          }),
-        }
-      );
+      const response = await fetch(`${ApiUrl}/users/verify-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          code: otpCode, // Send OTP code and email in the request body
+        }),
+      });
 
       const data = await response.json();
 
