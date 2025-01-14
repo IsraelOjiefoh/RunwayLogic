@@ -49,7 +49,7 @@ const SignUp: React.FC = () => {
       }
 
       navigate("/otp"); // Redirect after successful signup
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error.message);
       setErrorMsg("An error occurred. Please try again.");
     } finally {
