@@ -28,13 +28,16 @@ const SignUp: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/users/email-auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the request content type
-        },
-        body: JSON.stringify({ email }), // Convert the email to JSON format
-      });
+      const response = await fetch(
+        "https://server-auth-twxy.onrender.com/users/email-auth",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Set the request content type
+          },
+          body: JSON.stringify({ email }), // Convert the email to JSON format
+        }
+      );
 
       const result = await response.json(); // Parse the JSON response
       if (response.status === 409) {
