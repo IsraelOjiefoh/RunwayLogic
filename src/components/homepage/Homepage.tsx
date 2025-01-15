@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { useUser } from "../../../Context/UserContext";
 import logo from "../../assets/logo (2).png";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
@@ -11,14 +12,15 @@ import { RiBarChart2Fill } from "react-icons/ri";
 import { CiCalendar } from "react-icons/ci";
 
 const Homepage: React.FC = () => {
+  const { user } = useUser();
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
-        <img src={logo} alt="Logo" className="w-full h-full" />
+          <img src={logo} alt="Logo" className="w-full h-full" />
           <div className="flex items-center border border-gray-300 rounded-lg px-3 py-1 focus-within:ring focus-within:ring-orange-300">
-            <IoSearchOutline/>
+            <IoSearchOutline />
             <input
               type="text"
               placeholder="Search products"
@@ -27,15 +29,23 @@ const Homepage: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="text-sm text-gray-700 hover:text-gray-900">Homepage</button>
-          <button className="text-sm text-gray-700 hover:text-gray-900">Price suggestions</button>
+          <button className="text-sm text-gray-700 hover:text-gray-900">
+            Homepage
+          </button>
+          <button className="text-sm text-gray-700 hover:text-gray-900">
+            Price suggestions
+          </button>
           <button className="text-sm text-gray-700 hover:text-gray-900 flex items-center">
-            <HiOutlineMegaphone/>
+            <HiOutlineMegaphone />
             Marketing campaign
           </button>
-          <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"> <FaBoltLightning/>Upgrade plan</button>
+          <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
+            {" "}
+            <FaBoltLightning />
+            Upgrade plan
+          </button>
           <button className="relative">
-           <IoIosNotificationsOutline/>
+            <IoIosNotificationsOutline />
           </button>
           <div className="text-gray-700 font-bold text-lg">OD</div>
         </div>
@@ -45,7 +55,7 @@ const Homepage: React.FC = () => {
       <main className="p-6 space-y-6">
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold text-gray-800">
-          Welcome to RunwayLogic, David 🚀
+            Welcome to RunwayLogic, {user?.brandName} 🚀
           </h2>
           <p className="text-sm text-gray-600">
             Add your logo, set a password, and choose a plan to get started.
@@ -55,13 +65,22 @@ const Homepage: React.FC = () => {
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white shadow rounded-lg p-6 text-center">
-            <h3 className="text-gray-800 font-medium"> <LiaImage/> Upload your brand logo</h3>
-            <p className="text-sm text-gray-600 mb-4">Showcase your brand's unique identity.</p>
-            <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600">Add logo</button>
+            <h3 className="text-gray-800 font-medium">
+              {" "}
+              <LiaImage /> Upload your brand logo
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Showcase your brand's unique identity.
+            </p>
+            <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600">
+              Add logo
+            </button>
           </div>
           <div className="bg-white shadow rounded-lg p-6 text-center">
-            <GoShieldLock/>
-            <h3 className="text-gray-800 font-medium">Strengthen your security</h3>
+            <GoShieldLock />
+            <h3 className="text-gray-800 font-medium">
+              Strengthen your security
+            </h3>
             <p className="text-sm text-gray-600 mb-4">
               Enhance your protection and secure your account.
             </p>
@@ -70,28 +89,32 @@ const Homepage: React.FC = () => {
             </button>
           </div>
           <div className="bg-white shadow rounded-lg p-6 text-center">
-            <MdOutlineAddCard/>
+            <MdOutlineAddCard />
             <h3 className="text-gray-800 font-medium">Upgrade your plan</h3>
-            <p className="text-sm text-gray-600 mb-4">Get access to all features to elevate your brand.</p>
+            <p className="text-sm text-gray-600 mb-4">
+              Get access to all features to elevate your brand.
+            </p>
             <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600">
               Choose pricing
             </button>
           </div>
         </div>
 
-         {/* Analytics Section */}
+        {/* Analytics Section */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-2">
-              <RiBarChart2Fill/>
+              <RiBarChart2Fill />
               <h3 className="text-gray-800 font-medium">Analytics</h3>
             </div>
             <div className="flex items-center space-x-2">
-             <CiCalendar/>
+              <CiCalendar />
               <span className="text-sm text-gray-600">Last 30 days</span>
             </div>
           </div>
-          <p className="text-sm text-gray-600 mb-6">Your overall product collection summary</p>
+          <p className="text-sm text-gray-600 mb-6">
+            Your overall product collection summary
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white shadow rounded-lg p-6 text-center">
               <h4 className="text-2xl font-bold text-gray-800">0</h4>

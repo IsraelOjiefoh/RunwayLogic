@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEmail } from "../../EmailContext";
+import { useEmail } from "../../../Context/EmailContext";
 import { GetApiUrl } from "../../utils";
 
 const OtpVerification: React.FC = () => {

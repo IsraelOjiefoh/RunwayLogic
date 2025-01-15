@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useOccupation } from "../../../Context/OccupationContext";
 
 function Occupation() {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const { occupation, setOccupation } = useOccupation();
+
+  const Navigate = useNavigate();
 
   const handleNext = () => {
-    if (
-      selectedOption == "Fashion designer" ||
-      selectedOption == "brand-owner"
-    ) {
-      navigate("/brand-name");
+    if (occupation == "Fashion designer" || occupation == "Brand owner") {
+      Navigate("/brand-name");
     } else {
-      navigate("/dropshipper-name");
+      Navigate("/dropshipper-name");
     }
   };
-
+  console.log(occupation);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-green-50/50">
       <div className="w-full max-w-[640px] mx-4">
@@ -47,13 +45,13 @@ function Occupation() {
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Dropshipper Option */}
               <button
-                onClick={() => setSelectedOption("dropshipper")}
+                onClick={() => setOccupation("dropshipper")}
                 className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
               >
                 <div
                   className={`aspect-square mb-4 rounded-2xl overflow-hidden
                   ${
-                    selectedOption === "dropshipper"
+                    occupation === "dropshipper"
                       ? "ring-2 ring-orange-500"
                       : "ring-1 ring-gray-100"
                   }`}
@@ -69,13 +67,13 @@ function Occupation() {
 
               {/* Fashion Designer Option */}
               <button
-                onClick={() => setSelectedOption("Fashion designer")}
+                onClick={() => setOccupation("Fashion designer")}
                 className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
               >
                 <div
                   className={`aspect-square mb-4 rounded-2xl overflow-hidden
                   ${
-                    selectedOption === "Fashion designer"
+                    occupation === "Fashion designer"
                       ? "ring-2 ring-orange-500"
                       : "ring-1 ring-gray-100"
                   }`}
@@ -93,13 +91,13 @@ function Occupation() {
 
               {/* Brand Owner Option */}
               <button
-                onClick={() => setSelectedOption("Brand owner")}
+                onClick={() => setOccupation("Brand owner")}
                 className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
               >
                 <div
                   className={`aspect-square mb-4 rounded-2xl overflow-hidden
                   ${
-                    selectedOption === "Brand owner"
+                    occupation === "Brand owner"
                       ? "ring-2 ring-orange-500"
                       : "ring-1 ring-gray-100"
                   }`}
