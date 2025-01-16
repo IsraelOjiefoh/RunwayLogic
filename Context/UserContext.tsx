@@ -4,8 +4,10 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 interface User {
   _id: string;
   email: string;
-  brandName: string;
   occupation: string;
+  brandName: string;
+  firstName: string;
+  lastName: string;
 }
 
 // Define the context type

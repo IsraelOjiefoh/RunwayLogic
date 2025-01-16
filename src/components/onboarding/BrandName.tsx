@@ -16,7 +16,7 @@ function BrandName() {
 
   const Navigate = useNavigate();
   const ApiUrl = GetApiUrl();
-  console.log(brandName);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

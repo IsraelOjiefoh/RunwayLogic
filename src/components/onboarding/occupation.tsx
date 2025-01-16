@@ -11,11 +11,11 @@ function Occupation() {
   const handleNext = () => {
     if (occupation == "Fashion designer" || occupation == "Brand owner") {
       Navigate("/brand-name");
-    } else {
+    } else if (occupation == "dropshipper") {
       Navigate("/dropshipper-name");
     }
   };
-  console.log(occupation);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-green-50/50">
       <div className="w-full max-w-[640px] mx-4">

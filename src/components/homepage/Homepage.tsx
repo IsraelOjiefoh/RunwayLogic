@@ -55,7 +55,7 @@ const Homepage: React.FC = () => {
       <main className="p-6 space-y-6">
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold text-gray-800">
-            Welcome to RunwayLogic, {user?.brandName} 🚀
+            Welcome to RunwayLogic, {user?.brandName || user?.firstName} 🚀
           </h2>
           <p className="text-sm text-gray-600">
             Add your logo, set a password, and choose a plan to get started.

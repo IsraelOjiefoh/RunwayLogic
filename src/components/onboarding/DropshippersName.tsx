@@ -2,21 +2,53 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../../Context/UserContext";
+import { useEmail } from "../../../Context/EmailContext";
+import { useOccupation } from "../../../Context/OccupationContext";
+import { GetApiUrl } from "../../utils";
 
 function DropShippersName() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
   });
+  const { email } = useEmail();
+  const { occupation } = useOccupation();
+  const { setUser } = useUser();
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
+  const ApiUrl = GetApiUrl();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    // Navigate to the next page
-    navigate("/next");
+
+    try {
+      const response = await fetch(`${ApiUrl}/user/onboarding`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          occupation,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.error);
+      } else {
+        console.log(data.token);
+        setUser(data.user);
+        Navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error submitting OTP:", error);
+    }
   };
 
   return (
@@ -44,7 +76,7 @@ function DropShippersName() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" noValidate>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <label
@@ -65,7 +97,6 @@ function DropShippersName() {
                         firstName: e.target.value,
                       }))
                     }
-                    required
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -87,11 +118,14 @@ function DropShippersName() {
                         lastName: e.target.value,
                       }))
                     }
-                    required
                   />
                 </div>
               </div>
-
+              {errorMsg && (
+                <p className="mt-2 text-sm text-center text-red-600">
+                  {errorMsg}
+                </p>
+              )}
               <div className="flex justify-between items-center mt-8">
                 <span className="text-sm text-gray-400">Step 1 of 3</span>
                 <button
