@@ -3,7 +3,7 @@ export const GetApiUrl = () => {
 
   if (isProd) {
     if (window.location.hostname === "runwaylogic.netlify.app") {
-      return "https://server-auth-twxy.onrender.com";
+      return "https://server-production-c80e.up.railway.app";
     }
   } else {
     return "http://localhost:3000";

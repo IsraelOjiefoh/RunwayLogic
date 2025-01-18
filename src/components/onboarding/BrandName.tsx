@@ -2,16 +2,48 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEmail } from "../../../Context/EmailContext";
+import { useOccupation } from "../../../Context/OccupationContext";
+import { useUser } from "../../../Context/UserContext";
+import { GetApiUrl } from "../../utils";
 
 function BrandName() {
   const [brandName, setBrandName] = useState("");
-  const navigate = useNavigate();
+  const { email } = useEmail();
+  const { occupation } = useOccupation();
+  const { setUser } = useUser();
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const Navigate = useNavigate();
+  const ApiUrl = GetApiUrl();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (brandName) {
-      console.log("Brand name submitted:", brandName);
-      navigate("/final-step");
+
+    try {
+      const response = await fetch(`${ApiUrl}/user/onboarding`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          occupation,
+          brandName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.error);
+      } else {
+        setUser(data.user);
+        console.log(data.updatedUser);
+        Navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error submitting OTP:", error);
     }
   };
 
@@ -56,7 +88,11 @@ function BrandName() {
                   required
                 />
               </div>
-
+              {errorMsg && (
+                <p className="mt-2 text-sm text-center text-red-600">
+                  {errorMsg}
+                </p>
+              )}
               <div className="flex justify-between mt-8">
                 <span className="text-[13px] text-gray-500">Step 2 of 3</span>
                 <button

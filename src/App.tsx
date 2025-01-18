@@ -17,7 +17,7 @@ function App() {
         <Route path="/dropshipper-name" element={<DropshippersName />} />
         <Route path="/brand-name" element={<BrandName />} />
         <Route path="/login" element={<Login/>} />
-        <Route path="/homepage" element={<Homepage/>} />
+        <Route path="/home" element={<Homepage/>} />
       </Routes>
     </Router>
   );

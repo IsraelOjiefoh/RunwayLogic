@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetApiUrl } from "../../utils";
-import { useEmail } from "../../EmailContext";
+import { useEmail } from "../../../Context/EmailContext";
 import logo from "../../assets/logo (2).png";
 // import googleIcon from "../../assets/google.png";
 // import facebookIcon from "../../assets/facebook.png";
