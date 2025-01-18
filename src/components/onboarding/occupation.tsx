@@ -1,20 +1,68 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOccupation } from "../../../Context/OccupationContext";
 
 function Occupation() {
   const { occupation, setOccupation } = useOccupation();
+  const [inputOccupation, setInputOccupation] = useState("");
+  const [filteredOccupations, setFilteredOccupations] = useState([]);
+  const [customOccupation, setCustomOccupation] = useState(false);
+  const navigate = useNavigate();
 
-  const Navigate = useNavigate();
+  const occupationsList = [
+    "Fashion designer",
+    "Fashion retailer",
+    "Brand owner",
+    "Dropshipper",
+    "Clothing manufacturer",
+    "Textile supplier",
+    "Wholesale distributor",
+    "Boutique owner",
+    "E-commerce entrepreneur",
+    "Apparel entrepreneur",
+  ];
 
-  const handleNext = () => {
-    if (occupation == "Fashion designer" || occupation == "Brand owner") {
-      Navigate("/brand-name");
-    } else if (occupation == "dropshipper") {
-      Navigate("/dropshipper-name");
+  // Handle occupation input change and filter occupations list
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputOccupation(value);
+
+    // Filter list based on input
+    const filtered = occupationsList.filter((occupation) =>
+      occupation.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredOccupations(filtered);
+
+    // Check if user is typing a custom occupation
+    if (!filtered.length && value.length > 0) {
+      setCustomOccupation(true);
+    } else {
+      setCustomOccupation(false);
     }
   };
+
+  // Set the occupation when an option is clicked or enter key is pressed
+  const handleOccupationSelect = (occupation) => {
+    setOccupation(occupation);
+    navigate("/brand-name");
+  };
+
+  const handleNext = () => {
+    if (occupation || customOccupation) {
+      navigate("/brand-name");
+    } else {
+      alert("Please select or enter an occupation.");
+    }
+  };
+
+  useEffect(() => {
+    // Ensure occupation is set when it's selected or typed
+    if (occupation) {
+      setInputOccupation(occupation);
+    }
+  }, [occupation]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-green-50/50">
@@ -34,7 +82,7 @@ function Occupation() {
           <div className="bg-white rounded-[20px] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-8">
             <div className="space-y-3">
               <h2 className="text-base">
-                Which option describes your occupation better?
+                Which occupation describes you best?
               </h2>
               <p className="text-[13px] text-gray-500">
                 Share your occupation, and we'll tailor solutions to fit your
@@ -42,74 +90,38 @@ function Occupation() {
               </p>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Dropshipper Option */}
-              <button
-                onClick={() => setOccupation("dropshipper")}
-                className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
-              >
-                <div
-                  className={`aspect-square mb-4 rounded-2xl overflow-hidden
-                  ${
-                    occupation === "dropshipper"
-                      ? "ring-2 ring-orange-500"
-                      : "ring-1 ring-gray-100"
-                  }`}
-                >
-                  <img
-                    src="./image 3.png?height=200&width=200"
-                    alt="Dropshipper"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-[13px] text-gray-500">Dropshipper</span>
-              </button>
+            <div className="mt-8">
+              <input
+                type="text"
+                placeholder="Type your occupation..."
+                value={inputOccupation}
+                onChange={handleInputChange}
+                className="w-full h-10 px-3 bg-[#F9FAFB] border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
+              />
 
-              {/* Fashion Designer Option */}
-              <button
-                onClick={() => setOccupation("Fashion designer")}
-                className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
-              >
-                <div
-                  className={`aspect-square mb-4 rounded-2xl overflow-hidden
-                  ${
-                    occupation === "Fashion designer"
-                      ? "ring-2 ring-orange-500"
-                      : "ring-1 ring-gray-100"
-                  }`}
-                >
-                  <img
-                    src="./image.png?height=200&width=200"
-                    alt="Fashion designer"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-[13px] text-gray-500">
-                  Fashion designer
-                </span>
-              </button>
+              {/* Suggestions dropdown */}
+              {inputOccupation &&
+                !customOccupation &&
+                filteredOccupations.length > 0 && (
+                  <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-md max-h-40 overflow-y-auto">
+                    {filteredOccupations.map((occupation, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleOccupationSelect(occupation)}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                      >
+                        {occupation}
+                      </button>
+                    ))}
+                  </div>
+                )}
 
-              {/* Brand Owner Option */}
-              <button
-                onClick={() => setOccupation("Brand owner")}
-                className="relative rounded-2xl p-4 text-center hover:bg-gray-50 transition-colors"
-              >
-                <div
-                  className={`aspect-square mb-4 rounded-2xl overflow-hidden
-                  ${
-                    occupation === "Brand owner"
-                      ? "ring-2 ring-orange-500"
-                      : "ring-1 ring-gray-100"
-                  }`}
-                >
-                  <img
-                    src="./image (1).png?height=200&width=200"
-                    alt="Brand owner"
-                    className="w-full h-full object-cover"
-                  />
+              {/* If user enters a custom occupation */}
+              {customOccupation && (
+                <div className="mt-4 text-sm text-gray-600">
+                  <p>Your custom occupation: "{inputOccupation}"</p>
                 </div>
-                <span className="text-[13px] text-gray-500">Brand owner</span>
-              </button>
+              )}
             </div>
 
             <div className="flex justify-between mt-8">
