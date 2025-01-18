@@ -1,5 +1,5 @@
-import React from "react";
-import { useUser } from "../../../Context/UserContext";
+import { useState, useEffect } from "react";
+import { GetApiUrl } from "../../utils";
 import logo from "../../assets/logo (2).png";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
@@ -11,8 +11,30 @@ import { MdOutlineAddCard } from "react-icons/md";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { CiCalendar } from "react-icons/ci";
 
+interface User {
+  brandName: string;
+}
 const Homepage: React.FC = () => {
-  const { user } = useUser();
+  const [user, setUser] = useState<User | null>(null);
+
+  const ApiUrl = GetApiUrl();
+  const jwt = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    fetch(`${ApiUrl}/user/get-user`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data.user);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, []);
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -55,7 +77,7 @@ const Homepage: React.FC = () => {
       <main className="p-6 space-y-6">
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold text-gray-800">
-            Welcome to RunwayLogic, {user?.brandName || user?.firstName} 🚀
+            Welcome to RunwayLogic, {user?.brandName} 🚀
           </h2>
           <p className="text-sm text-gray-600">
             Add your logo, set a password, and choose a plan to get started.

@@ -38,8 +38,9 @@ function BrandName() {
       if (!response.ok) {
         setErrorMsg(data.error);
       } else {
-        setUser(data.user);
-        console.log(data.updatedUser);
+        setUser(data.updatedUser);
+        const jwt: string = data.token;
+        localStorage.setItem("authToken", jwt);
         Navigate("/home");
       }
     } catch (error) {
