@@ -7,7 +7,7 @@ import { useOccupation } from "../../../Context/OccupationContext";
 function Occupation() {
   const { occupation, setOccupation } = useOccupation();
   const [inputOccupation, setInputOccupation] = useState("");
-  const [filteredOccupations, setFilteredOccupations] = useState([]);
+  const [filteredOccupations, setFilteredOccupations] = useState<string[]>([]);
   const [customOccupation, setCustomOccupation] = useState(false);
   const navigate = useNavigate();
 
@@ -25,11 +25,11 @@ function Occupation() {
   ];
 
   // Handle occupation input change and filter occupations list
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputOccupation(value);
 
-    // Filter list based on input
+    // Filter list based on inputs
     const filtered = occupationsList.filter((occupation) =>
       occupation.toLowerCase().includes(value.toLowerCase())
     );
@@ -44,7 +44,7 @@ function Occupation() {
   };
 
   // Set the occupation when an option is clicked or enter key is pressed
-  const handleOccupationSelect = (occupation) => {
+  const handleOccupationSelect = (occupation: string) => {
     setOccupation(occupation);
     navigate("/brand-name");
   };
