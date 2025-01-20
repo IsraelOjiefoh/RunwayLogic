@@ -8,12 +8,22 @@ import Picture from "../../assets/pic.png";
 const Login: React.FC = () => {
   const { email, setEmail } = useEmail();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const ApiUrl = GetApiUrl();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     setIsLoading(true);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex for validation
+
+    if (!email || !emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`${ApiUrl}/auth/login`, {
         method: "POST",
@@ -100,6 +110,11 @@ const Login: React.FC = () => {
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
+            {errorMsg && (
+              <p className="mt-2 text-sm text-center text-red-600">
+                {errorMsg}
+              </p>
+            )}
 
             <button
               type="submit"
