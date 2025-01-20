@@ -40,7 +40,7 @@ const OtpVerification: React.FC = () => {
     const otpCode = otp.join(""); // Join OTP array into a string
 
     try {
-      const response = await fetch(`${ApiUrl}/users/verify-code`, {
+      const response = await fetch(`${ApiUrl}/auth/verify-code`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const OtpVerification: React.FC = () => {
 
   const handleResendCode = async () => {
     try {
-      const response = await fetch(`${ApiUrl}/users/resend-code`, {
+      const response = await fetch(`${ApiUrl}/auth/resend-code`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

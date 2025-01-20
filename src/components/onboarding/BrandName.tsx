@@ -41,7 +41,7 @@ function BrandName() {
         setUser(data.updatedUser);
         const jwt: string = data.token;
         localStorage.setItem("authToken", jwt);
-        Navigate("/home");
+        Navigate("/dashboard");
       }
     } catch (error) {
       console.error("Error submitting OTP:", error);

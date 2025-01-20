@@ -31,7 +31,7 @@ const SignUp: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${ApiUrl}/users/email-auth`, {
+      const response = await fetch(`${ApiUrl}/auth/email-auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Set the request content type
@@ -41,7 +41,7 @@ const SignUp: React.FC = () => {
 
       const result = await response.json(); // Parse the JSON response
       if (response.status === 409) {
-        setErrorMsg(result.error || "Email already exists please LogIn");
+        navigate("/login");
         return;
       }
       if (!response.ok) {

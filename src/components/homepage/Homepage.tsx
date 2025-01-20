@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { GetApiUrl } from "../../utils";
 import logo from "../../assets/logo (2).png";
 import { IoIosNotificationsOutline } from "react-icons/io";
@@ -18,16 +19,22 @@ const Homepage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const ApiUrl = GetApiUrl();
+  const Navigate = useNavigate();
   const jwt = localStorage.getItem("authToken");
 
   useEffect(() => {
-    fetch(`${ApiUrl}/user/get-user`, {
+    fetch(`${ApiUrl}/user/dashboard`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          Navigate("/login");
+        }
+        return response.json();
+      })
       .then((data) => {
         setUser(data.user);
       })
