@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetApiUrl } from "../../utils";
 import { useEmail } from "../../../Context/EmailContext";
@@ -7,11 +7,13 @@ import Picture from "../../assets/pic.png";
 
 const Login: React.FC = () => {
   const { email, setEmail } = useEmail();
+  const [isLoading, setIsLoading] = useState(false);
 
   const ApiUrl = GetApiUrl();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${ApiUrl}/auth/login`, {
         method: "POST",
@@ -49,6 +51,8 @@ const Login: React.FC = () => {
         console.error("Error logging in:", error);
       }
       throw error; // Rethrow the error to let the caller handle it
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +105,7 @@ const Login: React.FC = () => {
               type="submit"
               className="w-full bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
 

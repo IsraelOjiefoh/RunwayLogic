@@ -7,6 +7,7 @@ const OtpVerification: React.FC = () => {
   const { email } = useEmail();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const Navigate = useNavigate();
@@ -37,6 +38,7 @@ const OtpVerification: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const otpCode = otp.join(""); // Join OTP array into a string
 
     try {
@@ -60,6 +62,8 @@ const OtpVerification: React.FC = () => {
       }
     } catch (error) {
       console.error("Error submitting OTP:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,7 +121,7 @@ const OtpVerification: React.FC = () => {
         className="w-full max-w-xs px-4 py-2 bg-gray-800 text-white font-medium text-lg rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         onClick={handleSubmit}
       >
-        Verify email
+        {isLoading ? "Verifying email..." : "Verify email"}
       </button>
       <p className="text-sm text-gray-600 mt-4">
         Didn’t get a code?{" "}
