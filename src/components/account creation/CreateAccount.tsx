@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { GetApiUrl } from "../../utils";
 import { useEmail } from "../../../Context/EmailContext";
 import logo from "../../assets/logo (2).png";
-// import googleIcon from "../../assets/google.png";
+import googleIcon from "../../assets/google.png";
 // import facebookIcon from "../../assets/facebook.png";
 // import appleIcon from "../../assets/apple.png";
 import Picture from "../../assets/pic.png";
@@ -56,31 +56,6 @@ const SignUp: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  // const handleSocialSignup = async (
-  //   provider: "google" | "facebook" | "apple"
-  // ) => {
-  //   setIsLoading(true);
-
-  //   try {
-  //     // Here you would typically initiate OAuth flow
-  //     switch (provider) {
-  //       case "google":
-  //         window.open("https://accounts.google.com/o/oauth2/v2/auth", "_blank");
-  //         break;
-  //       case "facebook":
-  //         window.open("https://facebook.com/dialog/oauth", "_blank");
-  //         break;
-  //       case "apple":
-  //         window.open("https://appleid.apple.com/auth/authorize", "_blank");
-  //         break;
-  //     }
-  //   } catch (error) {
-  //     console.error("Social signup error:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 gap-0">
@@ -135,7 +110,7 @@ const SignUp: React.FC = () => {
               </button>
             </form>
 
-            {/* <div className="relative">
+            <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t"></div>
               </div>
@@ -144,16 +119,16 @@ const SignUp: React.FC = () => {
                   Or continue with
                 </span>
               </div>
-            </div> */}
+            </div>
 
-            {/* <div className="grid grid-cols-3 gap-2">
+            <div className="flex items-center justify-center space-x-4">
               <button
-                onClick={() => handleSocialSignup("google")}
+                onClick={() => (window.location.href = `${ApiUrl}/auth/google`)}
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
                 <img src={googleIcon} alt="Google" />
               </button>
-              <button
+              {/* <button
                 onClick={() => handleSocialSignup("facebook")}
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
@@ -164,8 +139,8 @@ const SignUp: React.FC = () => {
                 className="flex items-center justify-center p-2 border rounded-md hover:bg-gray-50"
               >
                 <img src={appleIcon} alt="Apple" />
-              </button>
-            </div> */}
+              </button> */}
+            </div>
 
             <p className="text-xs text-center text-gray-500">
               By creating an account, I agree to the{" "}
@@ -196,35 +171,6 @@ const SignUp: React.FC = () => {
             className="object-cover w-full h-fit"
           />
         </div>
-        {/* <div className="absolute bottom-8 left-8 right-8">
-          <div className="p-4 backdrop-blur-sm bg-white/90 rounded-lg">
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-gray-500"
-                >
-                  <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold">Mens hoodie long sleeves</h3>
-                <p className="text-sm text-gray-500">Current price: $29.99</p>
-              </div>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md">
-                Add to collection
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
