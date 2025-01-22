@@ -17,6 +17,7 @@ const SignUp: React.FC = () => {
 
   const navigate = useNavigate();
   const ApiUrl = GetApiUrl();
+  console.log("API URL:", ApiUrl); // Log the URL
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
