@@ -20,33 +20,52 @@ function BrandName() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(`${ApiUrl}/user/onboarding`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          occupation,
-          brandName,
-        }),
-        credentials: "include", // This ensures the cookie is sent with the request
-      });
+    // Define the maximum number of retries
+    const maxRetries = 3;
+    let attempts = 0;
 
-      const data = await response.json();
+    // A helper function to handle the retry logic
+    const submitRequest = async () => {
+      try {
+        const response = await fetch(`${ApiUrl}/user/onboarding`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            occupation,
+            brandName,
+          }),
+          credentials: "include", // This ensures the cookie is sent with the request
+        });
 
-      if (!response.ok) {
-        setErrorMsg(data.error);
-      } else {
-        setUser(data.updatedUser);
-        const jwt: string = data.token;
-        localStorage.setItem("authToken", jwt);
-        Navigate("/dashboard");
+        const data = await response.json();
+
+        if (!response.ok) {
+          setErrorMsg(data.error);
+          throw new Error(data.error); // Throw an error to trigger retry
+        } else {
+          setUser(data.updatedUser);
+          const jwt: string = data.token;
+          localStorage.setItem("authToken", jwt);
+          Navigate("/dashboard");
+        }
+      } catch (error) {
+        attempts++;
+
+        if (attempts < maxRetries) {
+          console.log(`Retrying... Attempt ${attempts}`);
+          // Retry after a small delay (e.g., 1 second)
+          setTimeout(submitRequest, 1000);
+        } else {
+          console.error("Max retry attempts reached. Unable to submit.");
+        }
       }
-    } catch (error) {
-      console.error("Error submitting OTP:", error);
-    }
+    };
+
+    // Start the request
+    submitRequest();
   };
 
   return (
