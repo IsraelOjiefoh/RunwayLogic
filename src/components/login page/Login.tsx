@@ -1,19 +1,78 @@
-import React from 'react';
-import Logo from '../../assets/logo (2).png';
-import Picture from '../../assets/pic.png';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { GetApiUrl } from "../../utils";
+import { useEmail } from "../../../Context/EmailContext";
+import Logo from "../../assets/logo (2).png";
+import Picture from "../../assets/pic.png";
 
 const Login: React.FC = () => {
+  const { email, setEmail } = useEmail();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const ApiUrl = GetApiUrl();
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex for validation
+
+    if (!email || !emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${ApiUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      // Check if the response status is 401 before parsing the response
+      if (response.status === 401) {
+        navigate("/");
+        return; // Exit early, no need to continue processing
+      }
+
+      // Handle other errors (non-401 status)
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
+      }
+
+      // If the login is successful, process the response
+      const data = await response.json();
+
+      // Save the token in localStorage
+      localStorage.setItem("authToken", data.token);
+
+      // Navigate to the dashboard after successful login
+      navigate("/dashboard");
+      return data; // Return the data for further usage
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error logging in:", error.message);
+      } else {
+        console.error("Error logging in:", error);
+      }
+      throw error; // Rethrow the error to let the caller handle it
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Left Section */}
       <div className="flex-1 p-8 lg:p-12">
         {/* Logo */}
         <div className="mb-12">
-          <img 
-            src={Logo}
-            alt="Company Logo" 
-            className="w-8 h-8"
-          />
+          <img src={Logo} alt="Company Logo" className="w-8 h-8" />
         </div>
 
         {/* Login Form */}
@@ -22,34 +81,50 @@ const Login: React.FC = () => {
             Welcome back
           </h1>
           <p className="text-gray-600 mb-8">
-            Are you a new user?{' '}
-            <a href="/signup" className="text-gray-900 hover:underline">
+            Are you a new user?{" "}
+            <a href="/" className="text-gray-900 hover:underline">
               Create an account
             </a>
           </p>
 
-          <form className="space-y-6">
+          <form
+            className="space-y-6"
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault(); // Prevent form submission
+              handleLogin();
+            }}
+          >
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email
               </label>
               <input
                 type="email"
                 id="email"
                 placeholder="e.g Johndoe@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
+            {errorMsg && (
+              <p className="mt-2 text-sm text-center text-red-600">
+                {errorMsg}
+              </p>
+            )}
 
             <button
               type="submit"
               className="w-full bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <a 
               href="/password-login" 
               className="inline-flex items-center text-gray-600 hover:text-gray-900"
@@ -65,9 +140,9 @@ const Login: React.FC = () => {
                 <path d="M5 12h14m-7-7l7 7-7 7"/>
               </svg>
             </a>
-          </div>
+          </div> */}
 
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
@@ -113,29 +188,29 @@ const Login: React.FC = () => {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> */}
 
-          <p className="mt-8 text-sm text-gray-600">
-            By creating an account, I agree to the{' '}
+          {/* <p className="mt-8 text-sm text-gray-600">
+            By creating an account, I agree to the{" "}
             <a href="/terms" className="text-gray-900 hover:underline">
               Terms of service
-            </a>
-            {' '}and{' '}
+            </a>{" "}
+            and{" "}
             <a href="/privacy" className="text-gray-900 hover:underline">
               Privacy policy
             </a>
-          </p>
+          </p> */}
         </div>
       </div>
 
       {/* Right Section - Image */}
       <div className="hidden lg:block lg:w-1/2">
         <div className="h-full w-full bg-cover bg-cover">
-          <img src={Picture} alt='pic' className="object-cover w-full h-fit" />
+          <img src={Picture} alt="pic" className="object-cover w-full h-fit" />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

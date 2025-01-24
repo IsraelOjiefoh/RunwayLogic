@@ -1,9 +1,41 @@
-import React from 'react'
+import React,{ useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { GetApiUrl } from "../../utils";
 import Logo from '../../assets/logo (2).png';
 import Barchart from '../../assets/barchart.png';
 import Settings from '../../assets/setting-2.png';
 
+interface User {
+  brandName: string;
+}
+
 const Homepage: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const ApiUrl = GetApiUrl();
+  const Navigate = useNavigate();
+  const jwt = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    fetch(`${ApiUrl}/user/dashboard`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          Navigate("/login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setUser(data.user);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
@@ -80,7 +112,7 @@ const Homepage: React.FC = () => {
         {/* Welcome Section */}
         <div className="px-4 sm:px-0">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Welcome to RunwayLogic, David{' '}
+            Welcome to RunwayLogic,{user?.brandName}{' '}
             <span role="img" aria-label="rocket">🚀</span>
           </h1>
           <p className="mt-1 text-sm text-gray-600">

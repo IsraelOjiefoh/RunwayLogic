@@ -31,6 +31,7 @@ function BrandName() {
           occupation,
           brandName,
         }),
+        credentials: "include", // This ensures the cookie is sent with the request
       });
 
       const data = await response.json();
@@ -38,9 +39,10 @@ function BrandName() {
       if (!response.ok) {
         setErrorMsg(data.error);
       } else {
-        setUser(data.user);
-        console.log(data.updatedUser);
-        Navigate("/home");
+        setUser(data.updatedUser);
+        const jwt: string = data.token;
+        localStorage.setItem("authToken", jwt);
+        Navigate("/dashboard");
       }
     } catch (error) {
       console.error("Error submitting OTP:", error);
