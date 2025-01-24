@@ -31,6 +31,7 @@ function BrandName() {
           occupation,
           brandName,
         }),
+        credentials: "include", // This ensures the cookie is sent with the request
       });
 
       const data = await response.json();

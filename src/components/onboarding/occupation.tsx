@@ -115,13 +115,6 @@ function Occupation() {
                     ))}
                   </div>
                 )}
-
-              {/* If user enters a custom occupation */}
-              {customOccupation && (
-                <div className="mt-4 text-sm text-gray-600">
-                  <p>Your custom occupation: "{inputOccupation}"</p>
-                </div>
-              )}
             </div>
 
             <div className="flex justify-between mt-8">
